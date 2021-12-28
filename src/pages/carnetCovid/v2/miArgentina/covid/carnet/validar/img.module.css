@@ -93,7 +93,7 @@ p {
   text-overflow: clip;
   overflow: hidden;
   white-space: normal;
-  height: 1.5em;
+  height: 1.9em;
 }
 
 .paseQr {
@@ -106,6 +106,8 @@ p {
 .nombre {
   left: 54.1%;
   top: 37.7%;
+  width:40%;
+  line-height: 0.9;
 }
 
 .dni {
@@ -148,7 +150,6 @@ p {
   text-overflow: clip;
   overflow: hidden;
   white-space: normal;
-  height: 1.5em;
 }
 
 .vacunaQr {

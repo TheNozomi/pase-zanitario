@@ -4,6 +4,8 @@ import * as css from "./img.module.css";
 import { useQueryParam, StringParam } from "use-query-params";
 import QRCode from "qrcode";
 
+
+
 import msalImg from "../../../../../../../images/escucho_msal.jpg";
 import paseImg from "../../../../../../../images/pase.png";
 import vacunaImg from "../../../../../../../images/vacuna.png";
@@ -57,83 +59,139 @@ function Vacuna(props) {
   );
 }
 
+const pdfOptions = {
+  orientation: 'portrait',
+  unit: 'in',
+  format: "a4"
+};
+
 export default function PasePage() {
   const [token] = useQueryParam("token", StringParam);
+  const [certificado] = useQueryParam("q", StringParam);
   const [qr, setQr] = React.useState("");
-  if(token){
-    var decoded = jwt.verify(token, "asuperprivatekeythatsnotvalid");
-  }else{
-    return (<span>Error</span>)
-  }
 
   React.useEffect(() => {
-    QRCode.toDataURL(`${decoded.bar === true ? getHostName() : "https://apisalud.msal.gob.ar"}/carnetCovid/v2/miArgentina/covid/carnet/validar/img?token=${token}`)
+    QRCode.toDataURL(`${decoded.bar === true ? getHostName() : "https://apisalud.msal.gob.ar"}/carnetCovid/v2/miArgentina/covid/carnet/validar/img?token=${token}&q=1`)
       .then(setQr)
       .catch((err) => {
         console.error(err);
       });
   }, [token]);
 
+  if(token){
+    var decoded = jwt.verify(token, "asuperprivatekeythatsnotvalid");
+  }else{
+    return (<span>Error</span>)
+  }
+
+
   const persona = JSON.parse(decoded.persona);
   const aplicaciones = JSON.parse(decoded.aplicaciones);
+  var today = new Date();
+  const date=today.getDate() + "/"+ parseInt(today.getMonth()+1) +"/"+ today.getFullYear();
 
   return (
     <>
-      <br />
-      <br />
 
-      <div width="100%" style={{ textAlign: "center" }}>
-        <img src={msalImg} align="center;" width="200px;" />
+    <div>
+      <div width="100%" style={{ textAlign: "center", paddingTop:10 }}>
+          <img src={msalImg} align="center;" width="200px;" />
       </div>
 
-      <p align="justify">
-        El Ministerio de Salud de la Nación de la República Argentina extiende
-        el presente, conforme el artículo 16 de la Ley 27.491, con los datos
-        sobre el estado de vacunación contra el Covid 19, que identifican a la
-        persona vacunada, el producto, e indican la fecha, la dosis, el lote y
-        el establecimiento de aplicación entre otra información, consignada por
-        la Jurisdicción Nacional, Provincial y/o del Gobierno de la Ciudad
-        Autónoma de Buenos Aires, responsable de la aplicación de la vacuna en
-        el Registro Federal de Vacunación Nominalizado.{" "}
-        <a href="https://www.argentina.gob.ar/miargentina/servicios/vacuna_covid">
-          Más información
-        </a>
-      </p>
-      <p align="justify">
-        This document has been issued by the National Ministry of Health of the
-        Argentine Republic in accordance with Section 16, Law No. 27491. It
-        contains data on COVID-19 vaccination status, identifying the person
-        vaccinated, the vaccine administered, as well as the date, doses, batch
-        and vaccination centre, in addition to other details reported on the
-        Federal Vaccination Roster by the Federal, Provincial and/or Buenos
-        Aires city government authority responsible for vaccine administration.{" "}
-        <a href="https://www.argentina.gob.ar/miargentina/servicios/vaccine_covid">
-          More information
-        </a>
-      </p>
+      {
+      certificado !== '1' ?
+      <>
+        <hr style={{width:"60%"}} />
+        <h1 className={`${css.titulo}`}><b>Vacunación Covid-19</b>/Covid-19 vaccination</h1>
+        <h1 className={`${css.subtitulo}`}>Fecha/date: {date}</h1>
+      </>
+      :
+      <>      
+        <p align="justify">
+          El Ministerio de Salud de la Nación de la República Argentina extiende
+          el presente, conforme el artículo 16 de la Ley 27.491, con los datos
+          sobre el estado de vacunación contra el Covid 19, que identifican a la
+          persona vacunada, el producto, e indican la fecha, la dosis, el lote y
+          el establecimiento de aplicación entre otra información, consignada por
+          la Jurisdicción Nacional, Provincial y/o del Gobierno de la Ciudad
+          Autónoma de Buenos Aires, responsable de la aplicación de la vacuna en
+          el Registro Federal de Vacunación Nominalizado.{" "}
+          <a href="https://www.argentina.gob.ar/miargentina/servicios/vacuna_covid">
+            Más información
+          </a>
+        </p>
+        <p align="justify">
+          This document has been issued by the National Ministry of Health of the
+          Argentine Republic in accordance with Section 16, Law No. 27491. It
+          contains data on COVID-19 vaccination status, identifying the person
+          vaccinated, the vaccine administered, as well as the date, doses, batch
+          and vaccination centre, in addition to other details reported on the
+          Federal Vaccination Roster by the Federal, Provincial and/or Buenos
+          Aires city government authority responsible for vaccine administration.{" "}
+          <a href="https://www.argentina.gob.ar/miargentina/servicios/vaccine_covid">
+            More information
+          </a>
+        </p>
+      </>
+      
+      }
 
-      <div
-        width="100%"
-        style={{
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Pase persona={persona} esquema={decoded.esquemaVacunacion} qr={qr} />
-        <br></br>
 
-        {aplicaciones.map((aplicacion, index) => {
-          return (
-            <React.Fragment key={"vacuna-" + index}>
-              <Vacuna aplicacion={aplicacion} qr={qr} />
-              <br></br>
-            </React.Fragment>
-          );
-        })}
-        <br></br>
-        <br></br>
-      </div>
+        <div
+          width="100%"
+          style={{
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Pase persona={persona} esquema={decoded.esquemaVacunacion} qr={qr} />
+          <br></br>
+
+          {aplicaciones.map((aplicacion, index) => {
+            return (
+              <React.Fragment key={"vacuna-" + index}>
+                <Vacuna aplicacion={aplicacion} qr={qr} />
+                <br></br>
+              </React.Fragment>
+            );
+          })}
+          <br></br>
+          <br></br>
+        </div>
+
+
+      {
+      certificado !== "1" ?
+      <>
+        <p align="justify">
+          El Ministerio de Salud de la Nación de la República Argentina extiende
+          el presente, conforme el artículo 16 de la Ley 27.491, con los datos
+          sobre el estado de vacunación contra el Covid 19, que identifican a la
+          persona vacunada, el producto, e indican la fecha, la dosis, el lote y
+          el establecimiento de aplicación entre otra información, consignada por
+          la Jurisdicción Nacional, Provincial y/o del Gobierno de la Ciudad
+          Autónoma de Buenos Aires, responsable de la aplicación de la vacuna en
+          el Registro Federal de Vacunación Nominalizado.
+        </p>
+        <p align="justify">
+          This document has been issued by the National Ministry of Health of the
+          Argentine Republic in accordance with Section 16, Law No. 27491. It
+          contains data on COVID-19 vaccination status, identifying the person
+          vaccinated, the vaccine administered, as well as the date, doses, batch
+          and vaccination centre, in addition to other details reported on the
+          Federal Vaccination Roster by the Federal, Provincial and/or Buenos
+          Aires city government authority responsible for vaccine administration.
+        </p>
+
+      </>
+      :
+      <>  
+      </>
+      }
+
+  </div>
+
     </>
   );
 }

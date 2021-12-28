@@ -193,7 +193,7 @@ const IndexPage = () => {
       const newToken = jwt.sign(tokenData, "asuperprivatekeythatsnotvalid");
 
       navigate(
-        `carnetCovid/v2/miArgentina/covid/carnet/validar/img?token=${newToken}`
+        `carnetCovid/v2/miArgentina/covid/carnet/validar/img?token=${newToken}&certificado=si`
       );
     },
     [dni, nombre, apellido, nacimiento, vacunas, vacunasActivas]

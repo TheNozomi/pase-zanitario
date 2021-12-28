@@ -84,12 +84,12 @@ p {
 
 .pase-texto {
   text-align: left;
-  font-family: inherit;
+  font-family: 'Encode Sans', sans-serif;
   color: #090708;
   font-weight: 700;
   position: absolute;
   font-size: 2.8em;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   text-overflow: clip;
   overflow: hidden;
   white-space: normal;
@@ -141,12 +141,12 @@ p {
 
 .vacuna-texto {
   text-align: left;
-  font-family: inherit;
+  font-family: 'Encode Sans', sans-serif;
   color: #090708;
   font-weight: 700;
   position: absolute;
   font-size: 2.8em;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   text-overflow: clip;
   overflow: hidden;
   white-space: normal;
